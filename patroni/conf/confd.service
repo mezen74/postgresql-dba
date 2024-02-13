@@ -1,0 +1,11 @@
+[Unit]
+Description=Confd
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/opt/confd/bin/confd
+
+[Install]
+WantedBy=multi-user.target

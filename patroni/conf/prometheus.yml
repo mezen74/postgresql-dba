@@ -1,0 +1,14 @@
+global:
+  scrape_interval: 10s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['192.168.2.10:9090']
+
+  - job_name: 'patroni_metrics'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['192.168.2.11:8008','192.168.2.12:8008','192.168.2.12:8008']
+      

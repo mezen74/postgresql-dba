@@ -1,0 +1,55 @@
+scope: pg_cluster
+name: pg-db1
+
+restapi:
+  listen: 192.168.2.11:8008
+  connect_address: 192.168.2.11:8008
+
+etcd:
+  host: 192.168.2.10:2379
+
+bootstrap:
+   dcs:
+    ttl: 30
+    loop_wait: 10
+    retry_timeout: 10
+    maximum_lag_on_failover: 1048576
+    postgresql:
+      use_pg_rewind: true
+      pg_hba:      
+      - host replication replicator 127.0.0.1/32 md5
+      - host replication replicator 192.168.2.0/24 md5
+      - host all all 0.0.0.0/0 md5
+      parameters:
+
+    initdb:
+      - encoding: UTF8
+      - data-checksums
+    
+
+postgresql:
+  listen: 127.0.0.1, 192.168.2.11 :5432
+  connect_address: 192.168.2.11
+  data_dir: /var/lib/pgsql/15/data
+  bin_dir: /usr/pgsql-15/bin/
+  pgpass: /tmp/pgpass0
+  authentication:
+    replication:
+      username: replicator
+      password: rep-pass
+    superuser:
+      username: postgres
+      password: otus135
+    rewind:  # Has no effect on postgres 10 and lower
+      username: rewind_user
+      password: rewind_password
+  parameters:
+    unix_socket_directories: '..'
+
+
+tags:
+    # failover_priority: 1
+    nofailover: false
+    noloadbalance: false
+    clonefrom: false
+    nosync: false
